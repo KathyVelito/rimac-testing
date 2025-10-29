@@ -1,62 +1,105 @@
 import LandingTemplate from "@/design-system/templates/landing/LandingTemplate";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import RimacTextField from "@/design-system/atoms/RimacTextField";
+import RimacSelect from "@/design-system/atoms/RimacSelect";
+import RimacCheckbox from "@/design-system/atoms/RimacCheckbox";
+import RimacButton from "@/design-system/atoms/RimacButton";
 
 function FormPlaceholder() {
+  const navigate = useNavigate();
+  const [phone, setPhone] = useState("");
+  const [documentNumber, setDocumentNumber] = useState("");
+  const [documentType, setDocumentType] = useState("");
+  const [acceptPrivacy, setAcceptPrivacy] = useState(false);
+  const [acceptCommercial, setAcceptCommercial] = useState(false);
+
+  const validateForm = () => {
+    // Verificar que todos los campos estén completos
+    const isPhoneValid = phone.length === 9;
+    const isDocumentValid = documentNumber.length === 8;
+    const isDocumentTypeSelected = documentType !== "";
+    const isPrivacyAccepted = acceptPrivacy;
+
+    return isPhoneValid && isDocumentValid && isDocumentTypeSelected && isPrivacyAccepted;
+  };
+
+  const handleCotizarClick = () => {
+    if (validateForm()) {
+      navigate("/planes");
+    } else {
+      alert("Por favor completa todos los campos requeridos y acepta la Política de Privacidad.");
+    }
+  };
   return (
     <form className="space-y-4 max-w-[480px]">
-      <div className="grid grid-cols-4 gap-3">
+      <div className="grid grid-cols-4 ">
         <div className="col-span-2">
-          <label className="mb-1 block text-sm font-medium">DNI</label>
-          <select className="w-full rounded-xl border border-[#D1D5DB] bg-white px-3 py-3 text-sm focus:border-black outline-none">
-            <option>DNI</option>
-            <option>CE</option>
-          </select>
+          <RimacSelect
+            name="documentType"
+            value={documentType}
+            onChange={(e) => setDocumentType(e.target.value)}
+            required
+          >
+            <option value="">Tipo de Documento</option>
+            <option value="dni">DNI</option>
+            <option value="ce">CE</option>
+          </RimacSelect>
         </div>
         <div className="col-span-2">
-          <label className="mb-1 block text-sm font-medium">
-            Nro. de documento
-          </label>
-          <input
-            className="w-full rounded-xl border border-[#D1D5DB] px-3 py-3 text-sm focus:border-black outline-none"
+          <RimacTextField
+            label="Nro. de documento"
+            name="documentNumber"
             placeholder="30216147"
+            value={documentNumber}
+            onChange={(e) => setDocumentNumber(e.target.value)}
+            error={documentNumber.length > 0 && documentNumber.length !== 8 ? "Debe tener 8 dígitos" : false}
+            helperText={!documentNumber ? "" : undefined}
+            roundedLeft={false}
+            required
           />
         </div>
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium">Celular</label>
-        <input
-          className="w-full rounded-xl border border-[#D1D5DB] px-3 py-3 text-sm focus:border-black outline-none"
+        <RimacTextField
+          label="Celular"
+          name="phone"
           placeholder="513021647"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+          error={phone.length > 0 && phone.length !== 9 ? "Debe tener 9 dígitos" : false}
+          helperText={!phone ? "" : undefined}
+          required
         />
       </div>
 
       <div className="space-y-2">
-        <label className="flex items-start gap-3 text-sm">
-          <input
-            type="checkbox"
-            className="mt-1 h-4 w-4 rounded border-[#9CA3AF]"
-          />
-          <span>Acepto la Política de Privacidad</span>
-        </label>
-        <label className="flex items-start gap-3 text-sm">
-          <input
-            type="checkbox"
-            className="mt-1 h-4 w-4 rounded border-[#9CA3AF]"
-          />
-          <span>Acepto la Política Comunicaciones Comerciales</span>
-        </label>
+        <RimacCheckbox
+          checked={acceptPrivacy}
+          onChange={(e) => setAcceptPrivacy(e.target.checked)}
+          name="privacy"
+        >
+          Acepto la <span className="underline">Política de Privacidad</span>
+        </RimacCheckbox>
+        <RimacCheckbox
+          checked={acceptCommercial}
+          onChange={(e) => setAcceptCommercial(e.target.checked)}
+          name="commercial"
+        >
+          Acepto la <span className="underline">Política Comunicaciones Comerciales</span>
+        </RimacCheckbox>
       </div>
 
       <a href="#" className="block text-sm underline">
         Aplican Términos y Condiciones.
       </a>
 
-      <button
-        type="button"
-        className="mt-2 h-12 w-full max-w-[240px] rounded-full bg-black px-6 text-white font-medium"
-      >
-        Cotiza aquí
-      </button>
+      <div className="mt-2">
+        <RimacButton intent="dark" onClick={handleCotizarClick}>
+          Cotiza aquí
+        </RimacButton>
+      </div>
     </form>
   );
 }

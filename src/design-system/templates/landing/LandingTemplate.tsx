@@ -1,16 +1,15 @@
 import HeaderTopBar from "@/design-system/organisms/header-top-bar/HeaderTopBar";
 import FooterLegal from "@/design-system/organisms/footer-legal/FooterLegal";
 import HeroPanel from "@/design-system/organisms/hero-panel/HeroPanel";
+import RimacTag from "@/design-system/atoms/RimacTag";
 import familiaImage from "@/assets/familia.png";
 
 type Props = {
   form: React.ReactNode; // el organismo QuoteForm (o temporalmente un placeholder)
-  showHeroOnMobile?: boolean; // por defecto false: solo desktop
 };
 
 export default function LandingTemplate({
   form,
-  showHeroOnMobile = false,
 }: Props) {
   return (
     <div className="min-h-dvh bg-[color:var(--bg-page,#F6F7FB)] relative">
@@ -25,26 +24,39 @@ export default function LandingTemplate({
       {/* Contenedor con grilla: 12 cols desktop, 4 cols mobile */}
       <main className="relative z-10 mx-auto w-full max-w-[1200px] min-h-[calc(100dvh-160px)] flex items-center justify-center py-5 box-border px-6 md:px-6 lg:px-8">
         <div className="grid grid-cols-4 gap-x-4 gap-y-8 md:grid-cols-12 md:gap-x-6 lg:gap-x-8 items-start">
-          {/* IZQUIERDA: Hero (hidden en mobile por defecto) */}
-          <section
-            className={[
-              "col-span-4 md:col-span-6",
-              showHeroOnMobile ? "" : "hidden md:block",
-            ].join(" ")}
-          >
+          {/* IZQUIERDA: Hero (desktop) */}
+          <section className="hidden md:block md:col-span-6">
             <HeroPanel imageSrc={familiaImage} alt="Familia feliz" />
           </section>
 
-          {/* DERECHA: Formulario */}
+          {/* DERECHA: Formulario (desktop) */}
           <section className="col-span-4 md:col-span-6 md:pl-2 lg:pl-6">
-            {/* Etiqueta verde */}
-            <div className="mb-4 inline-flex rounded-full bg-[#D7F9E9] px-3 py-1 text-xs font-semibold text-[#0B7A4B]">
-              Seguro Salud Flexible
+            {/* Encabezado para desktop */}
+            <div className="hidden md:block">
+              <div className="mb-4">
+                <RimacTag variant="default" size="md">Seguro Salud Flexible</RimacTag>
+              </div>
+              <h1 className="mb-3 text-3xl font-extrabold leading-tight md:text-[40px]">
+                Creado para ti y tu familia
+              </h1>
             </div>
 
-            <h1 className="mb-3 text-3xl font-extrabold leading-tight md:text-[40px]">
-              Creado para ti y tu familia
-            </h1>
+            {/* Layout mobile: Tag + Título + Hero en la misma fila */}
+            <div className="md:hidden flex gap-3 items-center mb-6">
+              <div className="flex-1">
+                <div className="mb-2">
+                  <RimacTag variant="default" size="md">Seguro Salud Flexible</RimacTag>
+                </div>
+                <h1 className="text-[28px] leading-[36px] font-extrabold text-[#03050F]">
+                  Creado para ti y tu familia
+                </h1>
+              </div>
+              <div className=" flex-shrink-0">
+                <HeroPanel imageSrc={familiaImage} alt="Familia feliz" />
+              </div>
+            </div>
+
+            {/* Descripción (visible en ambos, pero estilizada) */}
             <p className="mb-6 text-sm text-[#5E5E5E] max-w-full md:max-w-[38ch] border-t border-[#CCD1EE] pt-6 md:border-none">
               Tú eliges cuánto pagar. Ingresa tus datos, cotiza y recibe nuestra
               asesoría. 100% online.

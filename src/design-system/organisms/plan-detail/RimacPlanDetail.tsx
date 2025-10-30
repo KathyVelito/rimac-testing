@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 import RimacPlanPrice from "@/design-system/molecules/plan-price/RimacPlanPrice";
 import RimacPlanFeature from "@/design-system/molecules/plan-feature/RimacPlanFeature";
 import RimacButton from "@/design-system/atoms/RimacButton";
+import RimacTagRecommended from "@/design-system/atoms/RimacTagRecommended";
 
 type PlanFeature = {
   id: string;
@@ -13,22 +14,30 @@ type RimacPlanDetailProps = {
   price: string;
   period: string;
   features: PlanFeature[];
+  iconType?: "home" | "hospital";
+  recommended?: boolean;
   onSelectPlan?: () => void;
   className?: string;
 };
 
 const RimacPlanDetail = forwardRef<HTMLDivElement, RimacPlanDetailProps>(
-  ({ planName, price, period, features, onSelectPlan, className }, ref) => {
+  ({ planName, price, period, features, iconType = "home", recommended = false, onSelectPlan, className }, ref) => {
     return (
       <div 
         ref={ref}
         className={`bg-white rounded-[24px] shadow-[0px_1px_24px_0px_rgba(174,172,243,0.25)] p-8 w-full h-full flex flex-col ${className ?? ""}`}
       >
-        <div className="flex flex-col gap-6 w-full">
+        <div className="flex flex-col gap-4 w-full">
+          {recommended && (
+            <div>
+              <RimacTagRecommended>Recomendado</RimacTagRecommended>
+            </div>
+          )}
           <RimacPlanPrice
             planName={planName}
             price={price}
             period={period}
+            iconType={iconType}
           />
           
           <div className="h-px bg-[#E4E6F1] w-full" />

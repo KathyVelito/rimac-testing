@@ -4,19 +4,21 @@ import RimacPlanCard from "@/design-system/molecules/plan-card/RimacPlanCard";
 import RimacPlanDetail from "@/design-system/organisms/plan-detail/RimacPlanDetail";
 import RimacSlider from "@/design-system/organisms/slider/RimacSlider";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useUserStore } from "@/store/userStore";
 import { usePlanStore } from "@/store/planStore";
+import { useOptionStore } from "@/store/optionStore";
 import axios from "axios";
+import RimacBackButton from "@/design-system/atoms/RimacBackButton";
 
 export default function SelectPlanPage() {
   const navigate = useNavigate();
-  const [selectedPlan, setSelectedPlan] = useState<
-    "individual" | "family" | null
-  >(null);
   const user = useUserStore((s) => s.user);
   const { plans, setPlans, setLoading, setError } = usePlanStore();
-  
+  const setSelectedPlanValue = usePlanStore((s) => s.setSelectedPlan);
+  const selectedPlan = useOptionStore((s) => s.selectedAudience);
+  const setSelectedPlan = useOptionStore((s) => s.setSelectedAudience);
+
   const userAge = useMemo(() => {
     const birth = user?.birthDay; // formato esperado DD-MM-YYYY
     if (!birth) return null;
@@ -36,10 +38,13 @@ export default function SelectPlanPage() {
       try {
         setLoading(true);
         setError(null);
-        const endpoint = (import.meta as unknown as { env?: { VITE_API_PLANS_URL?: string } }).env?.VITE_API_PLANS_URL;
-        const url = endpoint && endpoint.length > 0
-          ? endpoint
-          : "https://rimac-front-end-challenge.netlify.app/api/plans.json";
+        const endpoint = (
+          import.meta as unknown as { env?: { VITE_API_PLANS_URL?: string } }
+        ).env?.VITE_API_PLANS_URL;
+        const url =
+          endpoint && endpoint.length > 0
+            ? endpoint
+            : "https://rimac-front-end-challenge.netlify.app/api/plans.json";
         const { data } = await axios.get(url);
         setPlans(Array.isArray(data?.list) ? data.list : []);
       } catch (e: unknown) {
@@ -56,7 +61,8 @@ export default function SelectPlanPage() {
 
   const displayedPlans = useMemo(() => {
     const base = plans; // mostrar todos
-    const filtered = typeof userAge === "number" ? base.filter((p) => p.age >= userAge) : base;
+    const filtered =
+      typeof userAge === "number" ? base.filter((p) => p.age >= userAge) : base;
     if (selectedPlan === "family") {
       return filtered.map((p) => ({
         ...p,
@@ -65,7 +71,11 @@ export default function SelectPlanPage() {
     }
     return filtered;
   }, [plans, selectedPlan, userAge]);
-  
+
+  const maxPrice = useMemo(() => {
+    return displayedPlans.reduce((acc, p) => Math.max(acc, p.price), 0);
+  }, [displayedPlans]);
+
   const steps = [
     {
       step: 1,
@@ -89,7 +99,8 @@ export default function SelectPlanPage() {
     setSelectedPlan(planType);
   };
 
-  const handleSelectPlan = () => {
+  const handleSelectPlan = (planName: string, planPrice: number) => {
+    setSelectedPlanValue({ name: planName, price: planPrice });
     navigate("/resumen");
   };
 
@@ -98,6 +109,9 @@ export default function SelectPlanPage() {
       <RimacStepper steps={steps} onBack={handleBack} />
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-4 md:grid-cols-12 gap-6 md:gap-8">
+          <div className="hidden col-span-4 md:col-span-10 md:col-start-2 md:flex justify-start ml-5">
+            <RimacBackButton onClick={handleBack} />
+          </div>
           <section className="col-span-4 md:col-span-6 md:col-start-4 mt-10">
             <h1 className="text-[28px] leading-[36px] md:text-[40px] md:leading-[48px] font-bold tracking-[-0.6px] text-[#141938] text-center md:px-30">
               {`${user?.name ?? ""} ¿Para quién deseas cotizar?`.trim()}
@@ -129,7 +143,6 @@ export default function SelectPlanPage() {
 
           {selectedPlan && (
             <section className="col-span-4 md:col-span-10 md:col-start-2">
-
               <RimacSlider>
                 {displayedPlans.map((plan, idx) => (
                   <RimacPlanDetail
@@ -137,6 +150,8 @@ export default function SelectPlanPage() {
                     planName={plan.name}
                     price={`$${plan.price}`}
                     period="al mes"
+                    iconType={(idx + 1) % 2 === 0 ? "hospital" : "home"}
+                    recommended={plan.price === maxPrice}
                     features={plan.description.slice(0, 3).map((desc, i) => ({
                       id: `${idx}-${i}`,
                       content: (
@@ -145,7 +160,7 @@ export default function SelectPlanPage() {
                         </>
                       ),
                     }))}
-                    onSelectPlan={handleSelectPlan}
+                    onSelectPlan={() => handleSelectPlan(plan.name, plan.price)}
                   />
                 ))}
               </RimacSlider>

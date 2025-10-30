@@ -21,7 +21,7 @@ const RimacStepperStep = forwardRef<HTMLDivElement, RimacStepperStepProps>(
       }
       return {
         circle: "bg-transparent",
-        circleBorder: "border-2 border-[#8F95B2]", // gris delineado
+        circleBorder: "border-2 border-[#8F95B2]",
         text: "text-[#8F95B2]",
         label: "text-[#8F95B2] font-normal"
       };

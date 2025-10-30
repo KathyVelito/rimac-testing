@@ -2,9 +2,17 @@ import MainLayout from "@/design-system/templates/main/MainLayout";
 import RimacStepper from "@/design-system/organisms/stepper/RimacStepper";
 import RimacSummaryCard from "@/design-system/organisms/summary/RimacSummaryCard";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "@/store/userStore";
+import { useLoginFormStore } from "@/store/loginFormStore";
+import { usePlanStore } from "@/store/planStore";
 
 export default function SummaryPage() {
   const navigate = useNavigate();
+  const user = useUserStore((s) => s.user);
+  const documentNumber = useLoginFormStore((s) => s.documentNumber);
+  const documentType = useLoginFormStore((s) => s.documentType);
+  const phone = useLoginFormStore((s) => s.phone);
+  const selectedPlan = usePlanStore((s) => s.selectedPlan);
   
   const steps = [
     {
@@ -25,6 +33,11 @@ export default function SummaryPage() {
     navigate("/planes");
   };
 
+  const fullName = user ? `${user.name} ${user.lastName}` : "";
+  const planName = selectedPlan?.name ?? "";
+  const planCost = selectedPlan ? `$${selectedPlan.price} al mes` : "";
+  const docLabel = (documentType || "dni").toUpperCase();
+
   return (
     <MainLayout>
       <RimacStepper steps={steps} onBack={handleBack} />
@@ -35,11 +48,11 @@ export default function SummaryPage() {
           </h1>
 
           <RimacSummaryCard
-            fullName="Rocio Miranda Díaz"
-            documentLabel="DNI: 444888888"
-            phoneLabel="Celular: 5130216147"
-            planName="Plan en Casa y Clínica"
-            planCost="Costo del Plan: $99 al mes"
+            fullName={fullName}
+            documentLabel={`${docLabel}: ${documentNumber || "-"}`}
+            phoneLabel={`Celular: ${phone || "-"}`}
+            planName={planName}
+            planCost={`Costo del Plan: ${planCost}`}
           />
         </div>
       </div>

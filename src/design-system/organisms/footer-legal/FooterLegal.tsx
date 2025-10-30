@@ -1,11 +1,14 @@
 import RimacLogo from "@/design-system/atoms/RimacLogo";
+import { Link } from "react-router-dom";
 
 export default function FooterLegal() {
   return (
     <footer className="mt-0 bg-[#03050F] md:bg-[#0E0E0E] text-white">
       <div className="mx-auto w-full max-w-[1200px] px-6 py-8 md:px-4 md:py-10 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-0">
         <div className="w-[138px] h-5 md:w-auto md:h-auto">
-          <RimacLogo variant="white" />
+          <Link to="/" aria-label="Ir al inicio">
+            <RimacLogo variant="white" />
+          </Link>
         </div>
         
         <div className="w-[336px] h-px bg-white/20 md:hidden"></div>

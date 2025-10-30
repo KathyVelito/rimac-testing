@@ -6,21 +6,30 @@ import RimacSelect from "@/design-system/atoms/RimacSelect";
 import RimacCheckbox from "@/design-system/atoms/RimacCheckbox";
 import RimacButton from "@/design-system/atoms/RimacButton";
 import { useUserStore } from "@/store/userStore";
+import { useLoginFormStore } from "@/store/loginFormStore";
 import axios from "axios";
 
 function FormPlaceholder() {
   const navigate = useNavigate();
-  const [phone, setPhone] = useState("");
-  const [documentNumber, setDocumentNumber] = useState("");
-  const [documentType, setDocumentType] = useState("");
-  const [acceptPrivacy, setAcceptPrivacy] = useState(false);
-  const [acceptCommercial, setAcceptCommercial] = useState(false);
-  const [showErrors, setShowErrors] = useState(false);
   const { setUser, setLoading, setError, loading } = useUserStore();
+
+  const documentType = useLoginFormStore((s) => s.documentType);
+  const setDocumentType = useLoginFormStore((s) => s.setDocumentType);
+  const documentNumber = useLoginFormStore((s) => s.documentNumber);
+  const setDocumentNumber = useLoginFormStore((s) => s.setDocumentNumber);
+  const phone = useLoginFormStore((s) => s.phone);
+  const setPhone = useLoginFormStore((s) => s.setPhone);
+  const acceptPrivacy = useLoginFormStore((s) => s.acceptPrivacy);
+  const setAcceptPrivacy = useLoginFormStore((s) => s.setAcceptPrivacy);
+  const acceptCommercial = useLoginFormStore((s) => s.acceptCommercial);
+  const setAcceptCommercial = useLoginFormStore((s) => s.setAcceptCommercial);
+
+  const [showErrors, setShowErrors] = useState(false);
 
   const validateForm = () => {
     const isPhoneValid = /^9\d{8}$/.test(phone);
-    const isDocumentValid = documentNumber.length === 8;
+    const requiredLen = documentType === "ce" ? 10 : 8;
+    const isDocumentValid = documentNumber.length === requiredLen;
     const isDocumentTypeSelected = documentType !== "";
     const isPrivacyAccepted = acceptPrivacy;
 
@@ -77,8 +86,8 @@ function FormPlaceholder() {
             value={documentNumber}
             onChange={(e) => setDocumentNumber(e.target.value)}
             error={
-              documentNumber.length > 0 && documentNumber.length !== 8
-                ? "Debe tener 8 dígitos"
+              documentNumber.length > 0 && documentNumber.length !== (documentType === "ce" ? 10 : 8)
+                ? documentType === "ce" ? "Debe tener 10 dígitos" : "Debe tener 8 dígitos"
                 : showErrors && documentNumber.length === 0
                 ? "Requerido"
                 : false

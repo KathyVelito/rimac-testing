@@ -26,6 +26,8 @@ const RimacCheckbox = forwardRef<HTMLInputElement, RimacCheckboxProps>(
       children,
       className,
       checkboxProps,
+      helperText,
+      error,
     },
     ref
   ) => {

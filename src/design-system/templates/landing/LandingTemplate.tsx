@@ -8,9 +8,7 @@ type Props = {
   form: React.ReactNode;
 };
 
-export default function LandingTemplate({
-  form,
-}: Props) {
+export default function LandingTemplate({ form }: Props) {
   return (
     <div className="min-h-dvh bg-[color:var(--bg-page,#F6F7FB)] relative">
       <div className="pointer-events-none absolute inset-0">
@@ -27,30 +25,27 @@ export default function LandingTemplate({
           </section>
 
           <section className="col-span-4 md:col-span-6 md:pl-2 lg:pl-6">
-            <div className="hidden md:block">
-              <div className="mb-4">
-                <RimacTag variant="default" size="md">Seguro Salud Flexible</RimacTag>
-              </div>
-              <h1 className="mb-3 text-3xl font-extrabold leading-tight md:text-[40px]">
-                Creado para ti y tu familia
-              </h1>
-            </div>
-
-            <div className="md:hidden flex gap-3 items-center mb-6">
-              <div className="flex-1">
-                <div className="mb-2">
-                  <RimacTag variant="default" size="md">Seguro Salud Flexible</RimacTag>
+            <div className="flex gap-2 md:gap-0 md:block">
+              <div className="w-1/2 flex flex-col justify-center md:w-full">
+                <div className="mb-4">
+                  <RimacTag variant="default" size="md">
+                    Seguro Salud Flexible
+                  </RimacTag>
                 </div>
-                <h1 className="text-[28px] leading-[36px] font-extrabold text-[#03050F]">
+                <h1 className="mb-3 text-3xl font-extrabold leading-tight md:text-[40px]">
                   Creado para ti y tu familia
                 </h1>
               </div>
-              <div className=" flex-shrink-0">
-                <HeroPanel imageSrc={familiaImage} alt="Familia feliz" />
+              <div className="block md:hidden shrink-0 w-1/2 h-auto rounded-[24px] overflow-hidden">
+                <img
+                  src={familiaImage}
+                  alt="Familia feliz"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
 
-            <p className="mb-6 text-sm text-[#5E5E5E] max-w-full md:max-w-[38ch] border-t border-[#CCD1EE] pt-6 md:border-none">
+            <p className="mb-6 mt-4 md:mt-0 text-sm text-[#5E5E5E] max-w-full md:max-w-[38ch] border-t border-[#C1C1C1] pt-6 md:border-none">
               Tú eliges cuánto pagar. Ingresa tus datos, cotiza y recibe nuestra
               asesoría. 100% online.
             </p>

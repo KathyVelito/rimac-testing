@@ -4,7 +4,7 @@ import RimacPhoneLink from "@/design-system/atoms/RimacPhoneLink";
 export default function HeaderTopBar() {
   return (
     <header className="w-full">
-      <div className="mx-auto w-full max-w-[1200px] px-6 py-1 md:px-4 flex items-center justify-between">
+      <div className="mx-auto w-full max-w-[1200px] h-[56px] md:h-[120px] box-border px-6 py-1 md:px-4 flex items-center justify-between">
         <div className="flex items-center gap-6">
           <RimacLogo />
         </div>

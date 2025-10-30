@@ -2,26 +2,83 @@ import MainLayout from "@/design-system/templates/main/MainLayout";
 import RimacStepper from "@/design-system/organisms/stepper/RimacStepper";
 import RimacPlanCard from "@/design-system/molecules/plan-card/RimacPlanCard";
 import RimacPlanDetail from "@/design-system/organisms/plan-detail/RimacPlanDetail";
+import RimacSlider from "@/design-system/organisms/slider/RimacSlider";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useUserStore } from "@/store/userStore";
+import { usePlanStore } from "@/store/planStore";
+import axios from "axios";
 
 export default function SelectPlanPage() {
   const navigate = useNavigate();
-  const [selectedPlan, setSelectedPlan] = useState<"individual" | "family" | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<
+    "individual" | "family" | null
+  >(null);
+  const user = useUserStore((s) => s.user);
+  const { plans, setPlans, setLoading, setError } = usePlanStore();
+  
+  const userAge = useMemo(() => {
+    const birth = user?.birthDay; // formato esperado DD-MM-YYYY
+    if (!birth) return null;
+    const [dd, mm, yyyy] = birth.split("-");
+    const b = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+    if (isNaN(b.getTime())) return null;
+    const now = new Date();
+    let age = now.getFullYear() - b.getFullYear();
+    const m = now.getMonth() - b.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < b.getDate())) age--;
+    return age;
+  }, [user?.birthDay]);
+
+  useEffect((): void => {
+    if (plans.length > 0) return;
+    const load = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const endpoint = (import.meta as unknown as { env?: { VITE_API_PLANS_URL?: string } }).env?.VITE_API_PLANS_URL;
+        const url = endpoint && endpoint.length > 0
+          ? endpoint
+          : "https://rimac-front-end-challenge.netlify.app/api/plans.json";
+        const { data } = await axios.get(url);
+        setPlans(Array.isArray(data?.list) ? data.list : []);
+      } catch (e: unknown) {
+        const message = axios.isAxiosError(e)
+          ? e.response?.data?.message || e.message
+          : "Error de red";
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, [plans.length, setPlans, setLoading, setError]);
+
+  const displayedPlans = useMemo(() => {
+    const base = plans; // mostrar todos
+    const filtered = typeof userAge === "number" ? base.filter((p) => p.age >= userAge) : base;
+    if (selectedPlan === "family") {
+      return filtered.map((p) => ({
+        ...p,
+        price: Math.round(p.price * 0.95 * 100) / 100,
+      }));
+    }
+    return filtered;
+  }, [plans, selectedPlan, userAge]);
   
   const steps = [
     {
       step: 1,
       label: "Planes y coberturas",
       isActive: true,
-      isCompleted: false
+      isCompleted: false,
     },
     {
       step: 2,
       label: "Resumen",
       isActive: false,
-      isCompleted: false
-    }
+      isCompleted: false,
+    },
   ];
 
   const handleBack = () => {
@@ -36,270 +93,66 @@ export default function SelectPlanPage() {
     navigate("/resumen");
   };
 
-  const individualPlans = [
-    {
-      id: "casa",
-      name: "Plan en Casa",
-      price: "$39",
-      period: "al mes",
-      features: [
-        {
-          id: "1",
-          content: (
-            <>
-              <span className="font-bold">Médico general a domicilio</span>
-              <span className="font-normal"> por S/20 y medicinas cubiertas al 100%.</span>
-            </>
-          )
-        },
-        {
-          id: "2", 
-          content: (
-            <>
-              <span className="font-bold">Videoconsulta</span>
-              <span className="font-normal"> y orientación telefónica al 100% en medicina general + pediatría.</span>
-            </>
-          )
-        },
-        {
-          id: "3",
-          content: (
-            <>
-              <span className="font-bold">Indemnización</span>
-              <span className="font-normal"> de S/300 en caso de hospitalización por más de un día.</span>
-            </>
-          )
-        }
-      ]
-    },
-    {
-      id: "clasico",
-      name: "Plan Clásico",
-      price: "$29",
-      period: "al mes",
-      features: [
-        {
-          id: "1",
-          content: (
-            <>
-              <span className="font-bold">Cobertura básica</span>
-              <span className="font-normal"> en clínicas afiliadas con copago del 20%.</span>
-            </>
-          )
-        },
-        {
-          id: "2", 
-          content: (
-            <>
-              <span className="font-bold">Emergencias 24/7</span>
-              <span className="font-normal"> con cobertura nacional.</span>
-            </>
-          )
-        },
-        {
-          id: "3",
-          content: (
-            <>
-              <span className="font-bold">Medicinas</span>
-              <span className="font-normal"> con descuento del 50% en farmacias afiliadas.</span>
-            </>
-          )
-        }
-      ]
-    },
-    {
-      id: "premium",
-      name: "Plan Premium",
-      price: "$59",
-      period: "al mes",
-      features: [
-        {
-          id: "1",
-          content: (
-            <>
-              <span className="font-bold">Cobertura completa</span>
-              <span className="font-normal"> en clínicas y hospitales premium.</span>
-            </>
-          )
-        },
-        {
-          id: "2", 
-          content: (
-            <>
-              <span className="font-bold">Medicinas 100%</span>
-              <span className="font-normal"> cubiertas sin copago.</span>
-            </>
-          )
-        },
-        {
-          id: "3",
-          content: (
-            <>
-              <span className="font-bold">Indemnización</span>
-              <span className="font-normal"> de S/500 por hospitalización.</span>
-            </>
-          )
-        }
-      ]
-    }
-  ];
-
-  const familyPlans = [
-    {
-      id: "familiar-basico",
-      name: "Plan Familiar Básico",
-      price: "$49",
-      period: "al mes",
-      features: [
-        {
-          id: "1",
-          content: (
-            <>
-              <span className="font-bold">Cobertura familiar</span>
-              <span className="font-normal"> para hasta 4 miembros de la familia.</span>
-            </>
-          )
-        },
-        {
-          id: "2", 
-          content: (
-            <>
-              <span className="font-bold">Pediatría incluida</span>
-              <span className="font-normal"> con consultas ilimitadas para menores de 18 años.</span>
-            </>
-          )
-        },
-        {
-          id: "3",
-          content: (
-            <>
-              <span className="font-bold">Medicinas familiares</span>
-              <span className="font-normal"> con descuento del 70% en farmacias afiliadas.</span>
-            </>
-          )
-        }
-      ]
-    },
-    {
-      id: "familiar-completo",
-      name: "Plan Familiar Completo",
-      price: "$79",
-      period: "al mes",
-      features: [
-        {
-          id: "1",
-          content: (
-            <>
-              <span className="font-bold">Cobertura premium</span>
-              <span className="font-normal"> para toda la familia en hospitales de primera.</span>
-            </>
-          )
-        },
-        {
-          id: "2", 
-          content: (
-            <>
-              <span className="font-bold">Especialistas incluidos</span>
-              <span className="font-normal"> cardiología, ginecología y pediatría especializada.</span>
-            </>
-          )
-        },
-        {
-          id: "3",
-          content: (
-            <>
-              <span className="font-bold">Indemnización familiar</span>
-              <span className="font-normal"> de S/800 por hospitalización de cualquier miembro.</span>
-            </>
-          )
-        }
-      ]
-    },
-    {
-      id: "familiar-premium",
-      name: "Plan Familiar Premium",
-      price: "$99",
-      period: "al mes",
-      features: [
-        {
-          id: "1",
-          content: (
-            <>
-              <span className="font-bold">Cobertura internacional</span>
-              <span className="font-normal"> para emergencias en el extranjero.</span>
-            </>
-          )
-        },
-        {
-          id: "2", 
-          content: (
-            <>
-              <span className="font-bold">Medicinas 100%</span>
-              <span className="font-normal"> cubiertas para toda la familia sin copago.</span>
-            </>
-          )
-        },
-        {
-          id: "3",
-          content: (
-            <>
-              <span className="font-bold">Asistencia 24/7</span>
-              <span className="font-normal"> con médico de cabecera asignado para la familia.</span>
-            </>
-          )
-        }
-      ]
-    }
-  ];
-
   return (
     <MainLayout>
       <RimacStepper steps={steps} onBack={handleBack} />
-      <div className="container mx-auto px-4 py-8 flex justify-center">
-        <div className="max-w-[800px] w-full">
-          {!selectedPlan ? (
-            <>
-              <h1 className="text-2xl font-bold mb-6 text-center">Selecciona tu plan</h1>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-                <RimacPlanCard
-                  title="Para mí"
-                  description="Cotiza tu seguro de salud y agrega familiares si así lo deseas."
-                  icon="protection"
-                  checked={selectedPlan === "individual"}
-                  onChange={() => handlePlanSelect("individual")}
-                />
-                
-                <RimacPlanCard
-                  title="Para alguien más"
-                  description="Realiza una cotización para uno de tus familiares o cualquier persona."
-                  icon="addUser"
-                  checked={selectedPlan === "family"}
-                  onChange={() => handlePlanSelect("family")}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <h1 className="text-2xl font-bold mb-6 text-center">Planes y coberturas</h1>
-              
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-                {(selectedPlan === "individual" ? individualPlans : familyPlans).map((plan) => (
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-4 md:grid-cols-12 gap-6 md:gap-8">
+          <section className="col-span-4 md:col-span-6 md:col-start-4 mt-10">
+            <h1 className="text-[28px] leading-[36px] md:text-[40px] md:leading-[48px] font-bold tracking-[-0.6px] text-[#141938] text-center md:px-30">
+              {`${user?.name ?? ""} ¿Para quién deseas cotizar?`.trim()}
+            </h1>
+            <p className="mt-2 text-[16px] leading-[28px] font-normal tracking-[0.1px] text-[#141938] text-center">
+              Selecciona la opción que se ajuste más a tus necesidades.
+            </p>
+          </section>
+
+          <section className="col-span-4 md:col-span-6 md:col-start-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+              <RimacPlanCard
+                title="Para mí"
+                description="Cotiza tu seguro de salud y agrega familiares si así lo deseas."
+                icon="protection"
+                checked={selectedPlan === "individual"}
+                onChange={() => handlePlanSelect("individual")}
+              />
+
+              <RimacPlanCard
+                title="Para alguien más"
+                description="Realiza una cotización para uno de tus familiares o cualquier persona."
+                icon="addUser"
+                checked={selectedPlan === "family"}
+                onChange={() => handlePlanSelect("family")}
+              />
+            </div>
+          </section>
+
+          {selectedPlan && (
+            <section className="col-span-4 md:col-span-10 md:col-start-2">
+
+              <RimacSlider>
+                {displayedPlans.map((plan, idx) => (
                   <RimacPlanDetail
-                    key={plan.id}
+                    key={`${plan.name}-${idx}`}
                     planName={plan.name}
-                    price={plan.price}
-                    period={plan.period}
-                    features={plan.features}
+                    price={`$${plan.price}`}
+                    period="al mes"
+                    features={plan.description.slice(0, 3).map((desc, i) => ({
+                      id: `${idx}-${i}`,
+                      content: (
+                        <>
+                          <span className="font-normal">{desc}</span>
+                        </>
+                      ),
+                    }))}
                     onSelectPlan={handleSelectPlan}
                   />
                 ))}
-              </div>
-            </>
+              </RimacSlider>
+            </section>
           )}
         </div>
       </div>
     </MainLayout>
   );
 }
-  

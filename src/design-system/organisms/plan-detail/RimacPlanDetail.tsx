@@ -22,7 +22,7 @@ const RimacPlanDetail = forwardRef<HTMLDivElement, RimacPlanDetailProps>(
     return (
       <div 
         ref={ref}
-        className={`bg-white rounded-[24px] shadow-[0px_1px_32px_0px_rgba(174,172,243,0.35)] p-8 w-full h-full flex flex-col ${className ?? ""}`}
+        className={`bg-white rounded-[24px] shadow-[0px_1px_24px_0px_rgba(174,172,243,0.25)] p-8 w-full h-full flex flex-col ${className ?? ""}`}
       >
         <div className="flex flex-col gap-6 w-full">
           <RimacPlanPrice

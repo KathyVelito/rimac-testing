@@ -26,7 +26,7 @@ const RimacStepper = forwardRef<HTMLDivElement, RimacStepperProps>(
     );
     const completedCount = steps.filter((s) => s.isCompleted).length;
     const currentStep = activeIndex !== -1 ? activeIndex + 1 : Math.min(completedCount + 1, totalSteps);
-    const progressPercent = Math.max(0, Math.min(100, Math.round((currentStep - 1) / (totalSteps - 1 || 1) * 100)));
+    const progressPercent = Math.max(0, Math.min(100, Math.round((currentStep / (totalSteps || 1)) * 100)));
 
     return (
       <div 
@@ -49,21 +49,26 @@ const RimacStepper = forwardRef<HTMLDivElement, RimacStepperProps>(
         </div>
 
         <div className="hidden md:flex box-border gap-4 items-start pl-0 pr-4 py-0 relative shrink-0">
-          {steps.map((step, index) => (
-            <div key={step.step} className="flex items-start">
-              <RimacStepperStep
-                step={step.step}
-                label={step.label}
-                isActive={step.isActive}
-                isCompleted={step.isCompleted}
-              />
-              {index < steps.length - 1 && (
-                <RimacStepperLine 
-                  isCompleted={step.isCompleted} 
+          {steps.map((step, index) => {
+            const isStepCompleted = step.isCompleted;
+            const lineProgress = activeIndex > index ? 100 : activeIndex === index ? 50 : 0;
+            return (
+              <div key={step.step} className="flex items-start">
+                <RimacStepperStep
+                  step={step.step}
+                  label={step.label}
+                  isActive={step.isActive}
+                  isCompleted={step.isCompleted}
                 />
-              )}
-            </div>
-          ))}
+                {index < steps.length - 1 && (
+                  <RimacStepperLine 
+                    isCompleted={isStepCompleted} 
+                    progressPercent={lineProgress}
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     );

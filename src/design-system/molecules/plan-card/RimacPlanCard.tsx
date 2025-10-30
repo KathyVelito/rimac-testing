@@ -32,32 +32,18 @@ const RimacPlanCard = forwardRef<HTMLDivElement, RimacPlanCardProps>(
         </div>
 
         <div className="flex flex-col gap-4 w-full">
-          <div className="hidden md:flex flex-col gap-2 w-full">
+          <div className="flex items-center md:items-start gap-5 md:gap-2 md:flex-col w-full">
             {icon === "protection" ? (
-              <RimacProtectionIcon size="md" />
+              <RimacProtectionIcon size="md" className="w-8 h-8 md:w-12 md:h-12" />
             ) : (
-              <RimacAddUserIcon size="md" />
-            )}
-            <h3 className="font-black text-[20px] leading-[28px] text-[#141938] tracking-[-0.2px]">
-              {title}
-            </h3>
-            <p className="font-normal text-[12px] leading-[20px] text-[#141938] tracking-[0.2px]">
-              {description}
-            </p>
-          </div>
-
-          <div className="md:hidden flex gap-2 items-center w-full">
-            {icon === "protection" ? (
-              <RimacProtectionIcon size="sm" />
-            ) : (
-              <RimacAddUserIcon size="sm" />
+              <RimacAddUserIcon size="md" className="w-8 h-8 md:w-12 md:h-12" />
             )}
             <h3 className="font-black text-[20px] leading-[28px] text-[#141938] tracking-[-0.2px] flex-1">
               {title}
             </h3>
           </div>
 
-          <div className="md:hidden">
+          <div>
             <p className="font-normal text-[12px] leading-[20px] text-[#141938] tracking-[0.2px]">
               {description}
             </p>

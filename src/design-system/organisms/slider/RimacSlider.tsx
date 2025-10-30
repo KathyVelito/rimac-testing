@@ -62,7 +62,6 @@ export default function RimacSlider({ children, className, options }: RimacSlide
           </div>
         </div>
 
-        {/* Controles mobile superpuestos */}
         <div className="absolute inset-0 flex items-center justify-between md:hidden pointer-events-none">
           <button
             type="button"
@@ -87,8 +86,6 @@ export default function RimacSlider({ children, className, options }: RimacSlide
             </svg>
           </button>
         </div>
-
-        {/* Controles desktop */}
         <div className="hidden md:flex items-center justify-between mt-4">
           <button
             type="button"

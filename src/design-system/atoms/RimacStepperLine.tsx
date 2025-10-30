@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 
 type RimacStepperLineProps = {
   isCompleted: boolean;
-  progressPercent?: number; // 0..100 solo usado en responsive
+  progressPercent?: number;
   className?: string;
 };
 

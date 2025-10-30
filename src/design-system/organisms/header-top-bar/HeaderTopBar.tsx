@@ -1,12 +1,15 @@
 import RimacLogo from "@/design-system/atoms/RimacLogo";
 import RimacPhoneLink from "@/design-system/atoms/RimacPhoneLink";
+import { Link } from "react-router-dom";
 
 export default function HeaderTopBar() {
   return (
     <header className="w-full">
       <div className="mx-auto w-full max-w-[1200px] h-[56px] md:h-[120px] box-border px-6 py-1 md:px-4 flex items-center justify-between">
         <div className="flex items-center gap-6">
-          <RimacLogo />
+          <Link to="/" aria-label="Ir al inicio">
+            <RimacLogo />
+          </Link>
         </div>
         
         <div className="flex items-center gap-2 md:gap-4">

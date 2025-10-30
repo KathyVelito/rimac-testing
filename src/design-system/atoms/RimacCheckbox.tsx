@@ -26,8 +26,6 @@ const RimacCheckbox = forwardRef<HTMLInputElement, RimacCheckboxProps>(
       children,
       className,
       checkboxProps,
-      helperText,
-      error,
     },
     ref
   ) => {
@@ -49,7 +47,6 @@ const RimacCheckbox = forwardRef<HTMLInputElement, RimacCheckboxProps>(
               {...checkboxProps}
             />
             
-            {/* Checkbox visual */}
             <div className={`
               w-4 h-4 rounded-[4px] border-2 flex items-center justify-center transition-colors
               ${checked 
@@ -79,7 +76,6 @@ const RimacCheckbox = forwardRef<HTMLInputElement, RimacCheckboxProps>(
             </div>
           </div>
           
-          {/* Texto del checkbox */}
           <div className={`flex-1 text-[12px] leading-[20px] tracking-[0.1px] ${disabled ? "text-[#9CA3AF]" : "text-[#0A051E]"}`}>
             {children}
             {required ? <span className="text-[#F7052D]"> *</span> : null}

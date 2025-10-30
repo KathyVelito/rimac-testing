@@ -11,25 +11,20 @@ type RimacStepperStepProps = {
 const RimacStepperStep = forwardRef<HTMLDivElement, RimacStepperStepProps>(
   ({ step, label, isActive, isCompleted, className }, ref) => {
     const getStepStyles = () => {
-      if (isCompleted) {
+      if (isCompleted || isActive) {
         return {
           circle: "bg-[#4F4FFF]",
+          circleBorder: "",
           text: "text-white",
           label: "text-[#141938] font-bold"
-        };
-      } else if (isActive) {
-        return {
-          circle: "bg-[#4F4FFF]",
-          text: "text-white",
-          label: "text-[#141938] font-bold"
-        };
-      } else {
-        return {
-          circle: "bg-[#7981B2]",
-          text: "text-white",
-          label: "text-[#7981B2] font-normal"
         };
       }
+      return {
+        circle: "bg-transparent",
+        circleBorder: "border-2 border-[#8F95B2]", // gris delineado
+        text: "text-[#8F95B2]",
+        label: "text-[#8F95B2] font-normal"
+      };
     };
 
     const styles = getStepStyles();
@@ -37,7 +32,7 @@ const RimacStepperStep = forwardRef<HTMLDivElement, RimacStepperStepProps>(
     return (
       <div ref={ref} className={`flex gap-2 md:gap-4 items-center md:items-start ${className ?? ""}`}>
         <div className="relative shrink-0 w-6 h-6">
-          <div className={`absolute inset-0 rounded-full ${styles.circle}`} />
+          <div className={`absolute inset-0 rounded-full ${styles.circle} ${styles.circleBorder}`} />
           <p className={`absolute inset-0 flex items-center justify-center font-bold text-[12px] leading-[16px] tracking-[0.4px] ${styles.text}`}>
             {step}
           </p>

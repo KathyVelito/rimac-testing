@@ -20,7 +20,7 @@ export default function LandingTemplate({
 
       <HeaderTopBar />
 
-      <main className="relative z-10 mx-auto w-full max-w-[1200px] min-h-[calc(100dvh-160px)] flex items-center justify-center py-5 box-border px-6 md:px-6 lg:px-8">
+      <main className="relative z-10 mx-auto w-full max-w-[1200px] min-h-[calc(100dvh-172px)] md:min-h-[calc(100dvh-236px)] flex items-center justify-center py-5 box-border px-6 md:px-6 lg:px-8">
         <div className="grid grid-cols-4 gap-x-4 gap-y-8 md:grid-cols-12 md:gap-x-6 lg:gap-x-8 items-start">
           <section className="hidden md:block md:col-span-6">
             <HeroPanel imageSrc={familiaImage} alt="Familia feliz" />

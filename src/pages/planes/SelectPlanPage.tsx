@@ -4,24 +4,28 @@ import RimacPlanCard from "@/design-system/molecules/plan-card/RimacPlanCard";
 import RimacPlanDetail from "@/design-system/organisms/plan-detail/RimacPlanDetail";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useUserStore } from "@/store/userStore";
 
 export default function SelectPlanPage() {
   const navigate = useNavigate();
-  const [selectedPlan, setSelectedPlan] = useState<"individual" | "family" | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<
+    "individual" | "family" | null
+  >(null);
+  const user = useUserStore((s) => s.user);
   
   const steps = [
     {
       step: 1,
       label: "Planes y coberturas",
       isActive: true,
-      isCompleted: false
+      isCompleted: false,
     },
     {
       step: 2,
       label: "Resumen",
       isActive: false,
-      isCompleted: false
-    }
+      isCompleted: false,
+    },
   ];
 
   const handleBack = () => {
@@ -255,34 +259,43 @@ export default function SelectPlanPage() {
   return (
     <MainLayout>
       <RimacStepper steps={steps} onBack={handleBack} />
-      <div className="container mx-auto px-4 py-8 flex justify-center">
-        <div className="max-w-[800px] w-full">
-          {!selectedPlan ? (
-            <>
-              <h1 className="text-2xl font-bold mb-6 text-center">Selecciona tu plan</h1>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-                <RimacPlanCard
-                  title="Para mí"
-                  description="Cotiza tu seguro de salud y agrega familiares si así lo deseas."
-                  icon="protection"
-                  checked={selectedPlan === "individual"}
-                  onChange={() => handlePlanSelect("individual")}
-                />
-                
-                <RimacPlanCard
-                  title="Para alguien más"
-                  description="Realiza una cotización para uno de tus familiares o cualquier persona."
-                  icon="addUser"
-                  checked={selectedPlan === "family"}
-                  onChange={() => handlePlanSelect("family")}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <h1 className="text-2xl font-bold mb-6 text-center">Planes y coberturas</h1>
-              
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-4 md:grid-cols-12 gap-6 md:gap-8">
+          <section className="col-span-4 md:col-span-6 md:col-start-4 mt-10">
+            <h1 className="text-[28px] leading-[36px] md:text-[40px] md:leading-[48px] font-bold tracking-[-0.6px] text-[#141938] text-center md:px-30">
+              {`${user?.name ?? ""} ¿Para quién deseas cotizar?`.trim()}
+            </h1>
+            <p className="mt-2 text-[16px] leading-[28px] font-normal tracking-[0.1px] text-[#141938] text-center">
+              Selecciona la opción que se ajuste más a tus necesidades.
+            </p>
+          </section>
+
+          <section className="col-span-4 md:col-span-6 md:col-start-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+              <RimacPlanCard
+                title="Para mí"
+                description="Cotiza tu seguro de salud y agrega familiares si así lo deseas."
+                icon="protection"
+                checked={selectedPlan === "individual"}
+                onChange={() => handlePlanSelect("individual")}
+              />
+
+              <RimacPlanCard
+                title="Para alguien más"
+                description="Realiza una cotización para uno de tus familiares o cualquier persona."
+                icon="addUser"
+                checked={selectedPlan === "family"}
+                onChange={() => handlePlanSelect("family")}
+              />
+            </div>
+          </section>
+
+          {selectedPlan && (
+            <section className="col-span-4 md:col-span-10 md:col-start-2">
+              <h1 className="text-2xl font-bold mb-6 text-center">
+                Planes y coberturas
+              </h1>
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
                 {(selectedPlan === "individual" ? individualPlans : familyPlans).map((plan) => (
                   <RimacPlanDetail
@@ -295,11 +308,10 @@ export default function SelectPlanPage() {
                   />
                 ))}
               </div>
-            </>
+            </section>
           )}
         </div>
       </div>
     </MainLayout>
   );
 }
-  

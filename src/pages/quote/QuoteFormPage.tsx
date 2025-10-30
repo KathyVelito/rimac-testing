@@ -5,6 +5,8 @@ import RimacTextField from "@/design-system/atoms/RimacTextField";
 import RimacSelect from "@/design-system/atoms/RimacSelect";
 import RimacCheckbox from "@/design-system/atoms/RimacCheckbox";
 import RimacButton from "@/design-system/atoms/RimacButton";
+import { useUserStore } from "@/store/userStore";
+import axios from "axios";
 
 function FormPlaceholder() {
   const navigate = useNavigate();
@@ -14,6 +16,7 @@ function FormPlaceholder() {
   const [acceptPrivacy, setAcceptPrivacy] = useState(false);
   const [acceptCommercial, setAcceptCommercial] = useState(false);
   const [showErrors, setShowErrors] = useState(false);
+  const { setUser, setLoading, setError, loading } = useUserStore();
 
   const validateForm = () => {
     const isPhoneValid = /^9\d{8}$/.test(phone);
@@ -24,11 +27,29 @@ function FormPlaceholder() {
     return isPhoneValid && isDocumentValid && isDocumentTypeSelected && isPrivacyAccepted;
   };
 
-  const handleCotizarClick = () => {
-    if (validateForm()) {
-      navigate("/planes");
-    } else {
+  const handleCotizarClick = async () => {
+    if (!validateForm()) {
       setShowErrors(true);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      const endpoint = import.meta.env.VITE_API_USER_URL as string | undefined;
+      const url = endpoint && endpoint.length > 0
+        ? endpoint
+        : "https://rimac-front-end-challenge.netlify.app/api/user.json";
+      const { data } = await axios.get(url);
+      setUser(data);
+      navigate("/planes");
+    } catch (e: unknown) {
+      const message = axios.isAxiosError(e)
+        ? e.response?.data?.message || e.message
+        : "Error de red";
+      setError(message);
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -112,8 +133,8 @@ function FormPlaceholder() {
       </a>
 
       <div className="mt-2">
-        <RimacButton intent="dark" onClick={handleCotizarClick}>
-          Cotiza aquí
+        <RimacButton intent="dark" onClick={handleCotizarClick} disabled={loading}>
+          {loading ? "Cargando..." : "Cotiza aquí"}
         </RimacButton>
       </div>
     </form>

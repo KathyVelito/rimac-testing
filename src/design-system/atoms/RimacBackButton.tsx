@@ -24,7 +24,7 @@ const RimacBackButton = forwardRef<HTMLButtonElement, RimacBackButtonProps>(
                 viewBox="0 0 24 24" 
                 fill="none" 
                 xmlns="http://www.w3.org/2000/svg"
-                className="rotate-90"
+                className="rotate-180"
               >
                 <path 
                   d="M9 18L15 12L9 6" 
@@ -37,7 +37,7 @@ const RimacBackButton = forwardRef<HTMLButtonElement, RimacBackButtonProps>(
             </div>
           </div>
         </div>
-        <span className="font-bold text-[18px] leading-[20px] tracking-[0.4px]">
+        <span className="font-bold hidden md:block text-[18px] leading-[20px] tracking-[0.4px]">
           Volver
         </span>
       </button>

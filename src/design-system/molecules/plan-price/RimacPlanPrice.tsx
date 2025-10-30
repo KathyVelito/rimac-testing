@@ -12,7 +12,6 @@ const RimacPlanPrice = forwardRef<HTMLDivElement, RimacPlanPriceProps>(
   ({ planName, price, period, className }, ref) => {
     return (
       <div ref={ref} className={`flex gap-4 items-start w-full ${className ?? ""}`}>
-        {/* Contenido de texto */}
         <div className="flex-1 flex flex-col gap-6">
           <h2 className="font-black text-[24px] leading-[32px] text-[#141938] tracking-[-0.2px]">
             {planName}
@@ -28,7 +27,6 @@ const RimacPlanPrice = forwardRef<HTMLDivElement, RimacPlanPriceProps>(
           </div>
         </div>
 
-        {/* Ícono de casa */}
         <div className="shrink-0">
           <RimacHomeIcon size="md" />
         </div>

@@ -33,7 +33,6 @@ const RimacStepper = forwardRef<HTMLDivElement, RimacStepperProps>(
         ref={ref} 
         className={`bg-[#EDEFFC] box-border flex items-center justify-center px-6 py-4 md:px-0 md:py-4 relative w-full ${className ?? ""}`}
       >
-        {/* Mobile: Barra de progreso con botón atrás y leyenda */}
         <div className="md:hidden flex items-center gap-4 w-full">
           {showBackButton && (
             <RimacBackButton onClick={onBack} />
@@ -49,7 +48,6 @@ const RimacStepper = forwardRef<HTMLDivElement, RimacStepperProps>(
           </div>
         </div>
 
-        {/* Desktop: Layout horizontal original */}
         <div className="hidden md:flex box-border gap-4 items-start pl-0 pr-4 py-0 relative shrink-0">
           {steps.map((step, index) => (
             <div key={step.step} className="flex items-start">

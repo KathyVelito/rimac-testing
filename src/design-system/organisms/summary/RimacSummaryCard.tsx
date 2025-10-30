@@ -21,13 +21,11 @@ const RimacSummaryCard = forwardRef<HTMLDivElement, RimacSummaryCardProps>(
           className ?? ""
         }`}
       >
-        {/* Encabezado */}
         <div className="flex flex-col gap-2 w-full">
           <p className="text-[10px] leading-4 font-black uppercase tracking-[0.8px] text-[#7981B2]">
             Precios calculados para:
           </p>
           <div className="flex items-center gap-2">
-            {/* Icono familia simple */}
             <div className="w-6 h-6 rounded-full bg-[#EDEFFC] grid place-items-center">
               <span className="text-[#4F4FFF] text-sm">👨‍👩‍👧</span>
             </div>
@@ -38,7 +36,6 @@ const RimacSummaryCard = forwardRef<HTMLDivElement, RimacSummaryCardProps>(
           <div className="h-px w-full bg-[#E4E6F1] mt-3" />
         </div>
 
-        {/* Datos */}
         <div className="mt-4 grid grid-cols-1 gap-6">
           <div>
             <p className="text-[16px] leading-6 font-bold text-[#141938]">

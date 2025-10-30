@@ -14,7 +14,6 @@ const RimacBackButton = forwardRef<HTMLButtonElement, RimacBackButtonProps>(
         className={`flex gap-2 items-center text-[#4F4FFF] hover:opacity-80 transition-opacity ${className ?? ""}`}
         {...rest}
       >
-        {/* Ícono de flecha hacia arriba rotada 90 grados */}
         <div className="flex items-center justify-center w-5 h-5">
           <div className="relative w-5 h-5">
             <div className="absolute inset-0 rounded-full border border-[#4F4FFF]" />

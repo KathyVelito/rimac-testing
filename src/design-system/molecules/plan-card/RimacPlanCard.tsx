@@ -24,7 +24,6 @@ const RimacPlanCard = forwardRef<HTMLDivElement, RimacPlanCardProps>(
         } ${className ?? ""}`}
         onClick={() => onChange?.(!checked)}
       >
-        {/* Radio button en la esquina superior derecha */}
         <div className="absolute top-4 right-4">
           <RimacRadioButton
             checked={checked}
@@ -32,9 +31,7 @@ const RimacPlanCard = forwardRef<HTMLDivElement, RimacPlanCardProps>(
           />
         </div>
 
-        {/* Contenido principal */}
         <div className="flex flex-col gap-4 w-full">
-          {/* Desktop: Ícono arriba, título y descripción abajo */}
           <div className="hidden md:flex flex-col gap-2 w-full">
             {icon === "protection" ? (
               <RimacProtectionIcon size="md" />
@@ -49,7 +46,6 @@ const RimacPlanCard = forwardRef<HTMLDivElement, RimacPlanCardProps>(
             </p>
           </div>
 
-          {/* Mobile: Ícono y título en línea horizontal */}
           <div className="md:hidden flex gap-2 items-center w-full">
             {icon === "protection" ? (
               <RimacProtectionIcon size="sm" />
@@ -61,7 +57,6 @@ const RimacPlanCard = forwardRef<HTMLDivElement, RimacPlanCardProps>(
             </h3>
           </div>
 
-          {/* Mobile: Descripción debajo */}
           <div className="md:hidden">
             <p className="font-normal text-[12px] leading-[20px] text-[#141938] tracking-[0.2px]">
               {description}

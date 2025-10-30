@@ -14,7 +14,6 @@ const RimacPhoneLink = forwardRef<HTMLAnchorElement, RimacPhoneLinkProps>(
         className={`inline-flex items-center gap-2 ${className ?? ""}`}
         {...rest}
       >
-        {/* Ícono de teléfono */}
         <div className="h-5 w-5 flex-shrink-0">
           <svg
             width="20"
@@ -30,7 +29,6 @@ const RimacPhoneLink = forwardRef<HTMLAnchorElement, RimacPhoneLinkProps>(
           </svg>
         </div>
         
-        {/* Número de teléfono */}
         <span className="font-bold text-[16px] leading-[20px] md:text-[18px] md:leading-[20px] text-[#03050F] tracking-[0.4px]">
           {phone}
         </span>

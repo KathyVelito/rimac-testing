@@ -22,21 +22,18 @@ const RimacHomeIcon = forwardRef<HTMLDivElement, RimacHomeIconProps>(
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Casa base */}
           <path
             d="M28 4L8 20V48C8 50.2091 9.79086 52 12 52H44C46.2091 52 48 50.2091 48 48V20L28 4Z"
             stroke="#4F4FFF"
             strokeWidth="2"
             fill="none"
           />
-          {/* Techo */}
           <path
             d="M8 20L28 4L48 20"
             stroke="#4F4FFF"
             strokeWidth="2"
             fill="none"
           />
-          {/* Puerta */}
           <rect
             x="24"
             y="36"
@@ -46,7 +43,6 @@ const RimacHomeIcon = forwardRef<HTMLDivElement, RimacHomeIconProps>(
             strokeWidth="2"
             fill="none"
           />
-          {/* Ventana */}
           <rect
             x="18"
             y="24"

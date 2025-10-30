@@ -16,15 +16,13 @@ const RimacTag = forwardRef<HTMLDivElement, RimacTagProps>(
       "overflow-hidden",
     ];
 
-    // Variantes de color
     const variantClasses = {
-      default: "bg-[linear-gradient(86deg,#00F4E2_0%,#00FF7F_100%)] text-[#03050F]", // Gradiente cyan a verde
+      default: "bg-[linear-gradient(86deg,#00F4E2_0%,#00FF7F_100%)] text-[#03050F]",
       success: "bg-[#D7F9E9] text-[#0B7A4B]",
       warning: "bg-[#FEF3C7] text-[#92400E]",
       error: "bg-[#FEE2E2] text-[#991B1B]",
     };
 
-    // Tamaños
     const sizeClasses = {
       sm: "px-2 py-1 text-xs leading-4",
       md: "px-2 py-1 text-sm leading-4",

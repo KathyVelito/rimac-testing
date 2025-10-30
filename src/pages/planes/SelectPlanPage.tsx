@@ -33,11 +33,9 @@ export default function SelectPlanPage() {
   };
 
   const handleSelectPlan = () => {
-    // Aquí navegarías al resumen
     navigate("/resumen");
   };
 
-  // Datos de los planes para "Para mí"
   const individualPlans = [
     {
       id: "casa",
@@ -146,7 +144,6 @@ export default function SelectPlanPage() {
     }
   ];
 
-  // Datos de los planes para "Para alguien más"
   const familyPlans = [
     {
       id: "familiar-basico",
@@ -264,7 +261,6 @@ export default function SelectPlanPage() {
             <>
               <h1 className="text-2xl font-bold mb-6 text-center">Selecciona tu plan</h1>
               
-              {/* Desktop: Grid de 2 columnas, Mobile: Stack vertical */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                 <RimacPlanCard
                   title="Para mí"
@@ -287,7 +283,6 @@ export default function SelectPlanPage() {
             <>
               <h1 className="text-2xl font-bold mb-6 text-center">Planes y coberturas</h1>
               
-              {/* Grid de 3 planes - misma altura para todas las tarjetas */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
                 {(selectedPlan === "individual" ? individualPlans : familyPlans).map((plan) => (
                   <RimacPlanDetail

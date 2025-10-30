@@ -1,7 +1,7 @@
 import { forwardRef, type ButtonHTMLAttributes, type AnchorHTMLAttributes } from "react";
 
 type CommonProps = {
-  intent?: "dark" | "primary"; // negro o rojo CTA
+  intent?: "dark" | "primary";
   fullWidth?: boolean;
   className?: string;
   children: React.ReactNode;
@@ -23,25 +23,23 @@ function buildClassNames({ intent, fullWidth }: { intent: "dark" | "primary"; fu
   const base = [
     "inline-flex items-center justify-center select-none",
     "font-bold text-white",
+    "cursor-pointer",
+    "md:transition-opacity md:duration-200 md:hover:opacity-80",
     fullWidth ? "w-full" : "",
-    // Quitar focus outline por defecto pero mantener accesibilidad
     "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-black/30",
   ];
 
-  // Variantes por intent
   if (intent === "dark") {
-    // Botón negro: responsive (mobile: 18px/20px, desktop: 20px/24px)
     base.push(
       "bg-[#03050F]", 
       "rounded-[40px]", 
       "px-[40px]", 
-      "py-[18px] md:py-[20px]", // mobile: 18px, desktop: 20px
-      "text-[18px] md:text-[20px]", // mobile: 18px, desktop: 20px
-      "leading-[20px] md:leading-[24px]", // mobile: 20px, desktop: 24px
-      "w-full md:w-auto" // mobile: full width, desktop: auto width
+      "py-[18px] md:py-[20px]",
+      "text-[18px] md:text-[20px]",
+      "leading-[20px] md:leading-[24px]",
+      "w-full md:w-auto"
     );
   } else {
-    // CTA rojo (según Figma, 18/20, px32/py14, radius 32)
     base.push("bg-[#FF1C44]", "rounded-[32px]", "px-[32px]", "py-[14px]", "text-[18px]", "leading-[20px]");
   }
 
@@ -65,7 +63,7 @@ const RimacButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, RimacButto
 
   const buttonProps = rest as ButtonHTMLAttributes<HTMLButtonElement>;
   return (
-    <button ref={ref as React.Ref<HTMLButtonElement>} className={classes} {...buttonProps}>
+    <button ref={ref as React.Ref<HTMLButtonElement>} className={classes} {...buttonProps} type={buttonProps.type ?? "button"}>
       {children}
     </button>
   );

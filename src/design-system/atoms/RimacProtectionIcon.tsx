@@ -21,14 +21,12 @@ const RimacProtectionIcon = forwardRef<HTMLDivElement, RimacProtectionIconProps>
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          {/* Escudo exterior */}
           <path
             d="M24 4L8 8V20C8 28.5 12.5 36.5 24 44C35.5 36.5 40 28.5 40 20V8L24 4Z"
             stroke="#4F4FFF"
             strokeWidth="2"
             fill="none"
           />
-          {/* Silueta de persona */}
           <path
             d="M24 16C26.2091 16 28 17.7909 28 20C28 22.2091 26.2091 24 24 24C21.7909 24 20 22.2091 20 20C20 17.7909 21.7909 16 24 16Z"
             fill="url(#personGradient)"

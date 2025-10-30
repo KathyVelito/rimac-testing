@@ -25,7 +25,6 @@ const RimacRadioButton = forwardRef<HTMLInputElement, RimacRadioButtonProps>(
         }`}>
           {checked && (
             <div className="absolute inset-0 flex items-center justify-center">
-              {/* Check verde */}
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path 
                   d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z" 

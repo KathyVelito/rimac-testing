@@ -33,7 +33,12 @@ function FormPlaceholder() {
     const isDocumentTypeSelected = documentType !== "";
     const isPrivacyAccepted = acceptPrivacy;
 
-    return isPhoneValid && isDocumentValid && isDocumentTypeSelected && isPrivacyAccepted;
+    return (
+      isPhoneValid &&
+      isDocumentValid &&
+      isDocumentTypeSelected &&
+      isPrivacyAccepted
+    );
   };
 
   const handleCotizarClick = async () => {
@@ -46,9 +51,10 @@ function FormPlaceholder() {
       setLoading(true);
       setError(null);
       const endpoint = import.meta.env.VITE_API_USER_URL as string | undefined;
-      const url = endpoint && endpoint.length > 0
-        ? endpoint
-        : "https://rimac-front-end-challenge.netlify.app/api/user.json";
+      const url =
+        endpoint && endpoint.length > 0
+          ? endpoint
+          : "https://rimac-front-end-challenge.netlify.app/api/user.json";
       const { data } = await axios.get(url);
       setUser(data);
       navigate("/planes");
@@ -61,7 +67,7 @@ function FormPlaceholder() {
       setLoading(false);
     }
   };
-  
+
   return (
     <form className="space-y-4 max-w-[480px]">
       <div className="grid grid-cols-4 ">
@@ -71,9 +77,13 @@ function FormPlaceholder() {
             value={documentType}
             onChange={(e) => setDocumentType(e.target.value)}
             required
-            error={showErrors && !documentType ? "Selecciona un tipo de documento" : false}
+            error={
+              showErrors && !documentType
+                ? "Selecciona un tipo de documento"
+                : false
+            }
           >
-            <option value="">Tipo de Documento</option>
+            <option value="">Tipo de Doc.</option>
             <option value="dni">DNI</option>
             <option value="ce">CE</option>
           </RimacSelect>
@@ -86,11 +96,14 @@ function FormPlaceholder() {
             value={documentNumber}
             onChange={(e) => setDocumentNumber(e.target.value)}
             error={
-              documentNumber.length > 0 && documentNumber.length !== (documentType === "ce" ? 10 : 8)
-                ? documentType === "ce" ? "Debe tener 10 dígitos" : "Debe tener 8 dígitos"
+              documentNumber.length > 0 &&
+              documentNumber.length !== (documentType === "ce" ? 10 : 8)
+                ? documentType === "ce"
+                  ? "Debe tener 10 dígitos"
+                  : "Debe tener 8 dígitos"
                 : showErrors && documentNumber.length === 0
-                ? "Requerido"
-                : false
+                  ? "Requerido"
+                  : false
             }
             helperText={!documentNumber ? "" : undefined}
             roundedLeft={false}
@@ -110,8 +123,8 @@ function FormPlaceholder() {
             phone.length > 0 && (!phone.startsWith("9") || phone.length !== 9)
               ? "Debe empezar con 9 y tener 9 dígitos"
               : showErrors && phone.length === 0
-              ? "Requerido"
-              : false
+                ? "Requerido"
+                : false
           }
           helperText={!phone ? "" : undefined}
           required
@@ -124,7 +137,11 @@ function FormPlaceholder() {
           onChange={(e) => setAcceptPrivacy(e.target.checked)}
           name="privacy"
           required
-          error={showErrors && !acceptPrivacy ? "Debes aceptar la Política de Privacidad" : false}
+          error={
+            showErrors && !acceptPrivacy
+              ? "Debes aceptar la Política de Privacidad"
+              : false
+          }
         >
           Acepto la <span className="underline">Política de Privacidad</span>
         </RimacCheckbox>
@@ -133,7 +150,8 @@ function FormPlaceholder() {
           onChange={(e) => setAcceptCommercial(e.target.checked)}
           name="commercial"
         >
-          Acepto la <span className="underline">Política Comunicaciones Comerciales</span>
+          Acepto la{" "}
+          <span className="underline">Política Comunicaciones Comerciales</span>
         </RimacCheckbox>
       </div>
 
@@ -142,7 +160,11 @@ function FormPlaceholder() {
       </a>
 
       <div className="mt-2">
-        <RimacButton intent="dark" onClick={handleCotizarClick} disabled={loading}>
+        <RimacButton
+          intent="dark"
+          onClick={handleCotizarClick}
+          disabled={loading}
+        >
           {loading ? "Cargando..." : "Cotiza aquí"}
         </RimacButton>
       </div>
